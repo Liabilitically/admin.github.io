@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class Gui  extends JFrame{
+public class gui  extends JFrame{
     final private Font mainFont = new Font("Sergoe print",Font.PLAIN,12);
     private String fName,lName;
     private np [] allStocks;
@@ -14,7 +14,7 @@ public class Gui  extends JFrame{
     JTextField tfFname,tfLname;
     JLabel lbWelcome;
 
-    public Gui(String firstName, String lastName, double balance){
+    public gui(String firstName, String lastName, double balance){
         fName = firstName;
         lName = lastName;
         bal = balance;
@@ -24,13 +24,14 @@ public class Gui  extends JFrame{
     public void initialize(){
 
         JPanel table = new JPanel();
-        table.setLayout(new GridLayout(22,4,5,5));
+        table.setLayout(new GridLayout(22,3,5,5));
 
         Stocks stocks = new Stocks();
         allStocks = stocks.newprice();
         amountOfShares = account.getAmtShares();
 
         JLabel temp = new JLabel("  Current Stocks:  ");
+        temp.setHorizontalAlignment(JTextField.CENTER);
         temp.setOpaque(true);
         temp.setBackground(new Color(184, 184, 184));
         temp.setFont(new Font("Sergoe print",Font.BOLD,18));
@@ -39,43 +40,86 @@ public class Gui  extends JFrame{
         temp.setOpaque(true);
         temp.setBackground(new Color(184, 184, 184));
         temp.setFont(new Font("Sergoe print",Font.BOLD,18));
+        temp.setHorizontalAlignment(JTextField.CENTER);
         table.add(temp);
         temp = new JLabel("  Your Shares:  ");
         temp.setOpaque(true);
         temp.setBackground(new Color(184, 184, 184));
         temp.setFont(new Font("Sergoe print",Font.BOLD,18));
+        temp.setHorizontalAlignment(JTextField.CENTER);
         table.add(temp);
-        table.add(new JLabel());
 
         int i=0;
         for (np stock:allStocks){
             System.out.println(stock.getName()+":"+stock.getPrice());
             JLabel name = new JLabel("    "+stock.getName()+" ");
             name.setFont(mainFont);
+            name.setHorizontalAlignment(JTextField.CENTER);
             JLabel price = new JLabel("    $"+stock.getPrice());
             price.setFont(mainFont);
+            price.setHorizontalAlignment(JTextField.CENTER);
             JLabel shares = new JLabel("    "+amountOfShares[i]+" ");
             shares.setFont(mainFont);
-            JButton buy = new JButton("BUY");
-            buy.setFont(mainFont);
+            shares.setHorizontalAlignment(JTextField.CENTER);
             table.add(name);
             table.add(price);
             table.add(shares);
-            table.add(buy);
             i++;
         }
-
-        temp = new JLabel("  Your Balance:  ");
+        table.add(new JLabel());
+        temp = new JLabel("  Your Balance:  $"+account.getBalance()+"  ");
         temp.setOpaque(true);
         temp.setBackground(new Color(184, 6, 6));
         temp.setFont(new Font("Sergoe print",Font.BOLD,18));
         temp.setForeground(Color.WHITE);
+        temp.setHorizontalAlignment(JTextField.CENTER);
         table.add(temp);
         table.add(new JLabel());
+        
+        JPanel form = new JPanel();
+        form.setLayout(new GridLayout(4,3,5,5));
+        
+        JLabel text = new JLabel("Add the Stock Abbreviation:");
+        text.setOpaque(true);
+        text.setBackground(new Color(184, 184, 184));
+        text.setFont(new Font("Sergoe print",Font.BOLD,18));
+        text.setHorizontalAlignment(JTextField.CENTER);
+        form.add(text);
+        
+        JTextField tfName = new JTextField();
+        tfName.setFont(mainFont);
+        tfName.setHorizontalAlignment(JTextField.CENTER);
+        form.add(tfName);
+        
+        text = new JLabel("Add the number of stocks:");
+        text.setOpaque(true);
+        text.setBackground(new Color(184, 184, 184));
+        text.setFont(new Font("Sergoe print",Font.BOLD,18));
+        text.setHorizontalAlignment(JTextField.CENTER);
+        form.add(text);
+        
+        JTextField tfNum = new JTextField();
+        tfNum.setFont(mainFont);
+        tfNum.setHorizontalAlignment(JTextField.CENTER);
+        form.add(tfNum);
+        
+        form.add(new JLabel());
+        
+        JPanel buttons = new JPanel();
+        buttons.setLayout(new GridLayout(1,2,5,5));
+        
+        JButton btnBuy = new JButton("BUY");
+        JButton btnSell = new JButton("SELL");
+        buttons.add(btnBuy);
+        buttons.add(btnSell);
+        
+        form.add(buttons);
+        form.add(new JLabel());
 
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
-        mainPanel.add(table,BorderLayout.WEST);
+        mainPanel.add(table,BorderLayout.NORTH);
+        mainPanel.add(form,BorderLayout.SOUTH);
 
         add(mainPanel);
 
@@ -87,7 +131,7 @@ public class Gui  extends JFrame{
     }
 
     public static void main(String[] args) {
-        Gui myGui = new Gui("John","Cena",100.0);
+        gui myGui = new gui("John","Cena",100.0);
         myGui.initialize();
     }
 }
