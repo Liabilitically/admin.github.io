@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class Stock_Market extends JFrame implements ActionListener
+public class gui extends JFrame implements ActionListener
 {
     private final Font mainFont = new Font("Sergoe print",Font.PLAIN,12);
     private String fName,lName;
@@ -19,7 +19,7 @@ public class Stock_Market extends JFrame implements ActionListener
     JLabel lbWelcome;
     JPanel displayTablePanel;
     JTextField tfStockName, tfShareCount;
-    JButton btnBuy, btnSell;
+    JButton btnBuy, btnSell, btnRefresh;
     JPanel mainPanel;
     String[][] stockData;
     private final int MaxStocks = 20;
@@ -27,7 +27,7 @@ public class Stock_Market extends JFrame implements ActionListener
     private final int TotalColumns = 3;
     private final int HeaderRow = 0;
 
-    public Stock_Market(String firstName, String lastName, double balance){
+    public gui(String firstName, String lastName, double balance){
         fName = firstName;
         lName = lastName;
         bal = balance;
@@ -50,6 +50,10 @@ public class Stock_Market extends JFrame implements ActionListener
 
         // Create Sell button and add listener
         btnSell = new JButton("SELL");
+        btnSell.addActionListener(this);
+        
+        btnRefresh = new JButton("REFRESH");
+        btnRefresh.addActionListener(this);
 
         // mainPanel = new JPanel();
 
@@ -137,7 +141,7 @@ public class Stock_Market extends JFrame implements ActionListener
         // Add balance row
         displayTablePanel.add(new JLabel()); // first column is empty
 
-        lbl = new JLabel("Balance: $" + account.getBalance()); // Prep second column
+        lbl = new JLabel("Balance: $" + Math.round(account.getBalance()*100.0)/100.0); // Prep second column
         lbl.setOpaque(true);
         lbl.setBackground(new Color(184, 6, 6));
         lbl.setFont(new Font("Sergoe print",Font.BOLD,18));
@@ -188,9 +192,7 @@ public class Stock_Market extends JFrame implements ActionListener
         form.add(buttons);
         form.add(new JLabel());
 
-        JButton refresh = new JButton("REFRESH");
-
-        form.add(refresh);
+        form.add(btnRefresh);
         form.add(new JLabel());
 
         JComponent pane = (JComponent) this.getContentPane();
@@ -225,26 +227,40 @@ public class Stock_Market extends JFrame implements ActionListener
         {
             case "buy":
                 //Get Stock name
-                String stock = tfStockName.getText();
+                String stockToBuy = tfStockName.getText();
 
                 // Get share count
-                int shareCnt = Integer.parseInt(tfShareCount.getText());
+                int buyCnt = Integer.parseInt(tfShareCount.getText());
 
-                int index = indexInArray(stock);
-                double price = shareCnt * allStocks[index].getPrice();
+                int indexToBuy = indexInArray(stockToBuy);
+                double buyPrice = buyCnt * allStocks[indexToBuy].getPrice();
 
-                if (index > 0 && price <= account.getBalance()){
-                    account.Withdraw(price);
-                    account.updateStocks(index, shareCnt);
+                if (indexToBuy > 0 && buyPrice <= account.getBalance() && buyCnt!=0){
+                    account.Withdraw(buyPrice);
+                    account.updateStocks(indexToBuy, buyCnt);
                 }
+                
                 break;
 
             case "sell":
-                //Add
+                String stockToSell = tfStockName.getText();
+
+                // Get share count
+                int sellCnt = Integer.parseInt(tfShareCount.getText());
+
+                int indexToSell = indexInArray(stockToSell);
+                double sellRevenue = sellCnt * allStocks[indexToSell].getPrice();
+                
+                if (indexToSell>0 && sellCnt<=amountOfShares[indexToSell] && sellCnt!=0){
+                    account.updateStocks(indexToSell,(-1)*sellCnt);
+                    account.Insert(sellRevenue);
+                }
+                
                 break;
                 
             case "refresh":
-                //Add
+                Stocks stocks = new Stocks();
+                allStocks = stocks.newprice();
                 break;
         };
         
@@ -264,7 +280,7 @@ public class Stock_Market extends JFrame implements ActionListener
     }
 
     public static void main(String[] args) {
-        Stock_Market stockMarket = new Stock_Market("John","Cena",100.0);
+        gui stockMarket = new gui("John","Cena",100.0);
         stockMarket.initialize();
     }
 }
