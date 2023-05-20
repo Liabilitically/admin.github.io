@@ -156,18 +156,7 @@ public class Stock_Market extends JFrame implements ActionListener,Runnable
         lbl.setHorizontalAlignment(JTextField.CENTER);
         displayTablePanel.add(lbl);
 
-        displayTablePanel.add(new JLabel()); // third column is empty
-        
-        //displayTablePanel.add(new JLabel(" "));
-        
-        /*lbl = new JLabel("30");
-        lbl.setOpaque(true);
-        lbl.setBackground(new Color(184, 6, 6));
-        lbl.setFont(new Font("Sergoe print",Font.BOLD,18));
-        lbl.setForeground(Color.WHITE);
-        lbl.setHorizontalAlignment(JTextField.CENTER);
-        displayTablePanel.add(lbl);*/
-        
+        displayTablePanel.add(new JLabel()); // third column is empty   
         
         JPanel form = new JPanel();
         form.setLayout(new GridLayout(5,3,5,5));
@@ -205,13 +194,10 @@ public class Stock_Market extends JFrame implements ActionListener,Runnable
         form.add(tm);
         Thread threadTimer = new Thread(this);
         threadTimer.start();
-        //createTimer();
         
         JPanel buttons = new JPanel();
         buttons.setLayout(new GridLayout(1,2,5,5));
         
-        // JButton btnBuy = new JButton("BUY");
-        // JButton btnSell = new JButton("SELL");
         buttons.add(btnBuy);
         buttons.add(btnSell);
         
@@ -229,7 +215,6 @@ public class Stock_Market extends JFrame implements ActionListener,Runnable
 
         mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
-        // mainPanel.add(table,BorderLayout.NORTH);
         mainPanel.add(displayTablePanel,BorderLayout.NORTH);
         mainPanel.add(form,BorderLayout.SOUTH);
         
@@ -247,7 +232,6 @@ public class Stock_Market extends JFrame implements ActionListener,Runnable
 
     public void actionPerformed(ActionEvent e) 
     {
-        //int time = Integer.parseInt(tm.getText());
         JButton btn = (JButton) e.getSource();
 
         switch(btn.getText().toLowerCase())
@@ -309,9 +293,6 @@ public class Stock_Market extends JFrame implements ActionListener,Runnable
                 currentTimer = i;
                 tm.setText(""+i);
                 i--;
-
-                //PrepareDisplayData();
-                //UpdatePanel();
                 
                 if (i == -1) {
                     timer.cancel();
@@ -323,42 +304,6 @@ public class Stock_Market extends JFrame implements ActionListener,Runnable
                 }
             }
         }, 0, 1000);
-        
-        /*final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-
-        final Runnable runnable = new Runnable() {
-            int countdownStarter = timerCnt;
-
-            @Override
-            public void run() {
-
-                tm.setText(""+countdownStarter);
-                countdownStarter--;
-
-                if (countdownStarter < 0) {
-                    Stocks stocks = new Stocks();
-                    allStocks = stocks.newprice();
-                    runnable.;
-                    scheduler.shutdown();
-                    PrepareDisplayData();
-                    UpdatePanel();
-                }
-            }
-        };
-        scheduler.scheduleAtFixedRate(runnable, 0, 1, SECONDS);*/
-        
-        /*java.util.Timer timer = new java.util.Timer();
-        timerCnt = 30;
-        TimerTask task = new TimerTask(){
-            @Override
-            public void run(){
-                tm.setText(Integer.toString(timerCnt));
-                timerCnt--;
-                if (timerCnt == -1)
-                    timer.cancel();
-            }
-        };
-        timer.scheduleAtFixedRate(task, 1000, 1000);*/
     }
     
     private int indexInArray(String abb){
